@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pathwise</title>
+<style>
+:root{--g:linear-gradient(135deg,#8226FF,#C62BFF);--p:#8226FF;--ink:#16161d;--mut:#6b6b7b;--bd:#e6e6ec;--bg2:#f7f7f9;--warn:#b42318;--ok:#17803d;--f:"Inter","Plus Jakarta Sans",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font:15px/1.5 var(--f);color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+.top{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--bd);position:relative}
+.top::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:var(--pr,0%);background:var(--g);transition:width .3s}
+.logo{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:-.01em}
+.logo i{width:20px;height:20px;border-radius:6px;background:var(--g);display:block}
+.lang a{color:var(--mut);text-decoration:none;font-size:13px;padding:4px 8px;border-radius:6px}
+.lang a.on{color:var(--ink);background:var(--bg2);font-weight:600}
+.stage{height:calc(100dvh - 56px);display:flex;flex-direction:column;overflow:hidden}
+.btn{border:1px solid var(--bd);background:#fff;border-radius:8px;padding:9px 16px;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--bg2)}
+.btn.pri{background:var(--g);color:#fff;border:0}
+.btn.pri:hover{filter:brightness(1.06)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.sm{padding:6px 11px;font-size:13px}
+/* intro */
+.intro{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;min-height:0}
+.in{width:100%;max-width:900px}
+.in h1{font-size:clamp(26px,3.6vw,38px);line-height:1.15;letter-spacing:-.025em;font-weight:700;margin-bottom:12px}
+.in .lead{color:var(--mut);font-size:17px;max-width:60ch;margin-bottom:28px}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.stat{padding:18px 20px;border:1px solid var(--bd);border-radius:10px;grid-column:span 2}
+.stat.w{grid-column:span 3}
+.stat b{font-size:26px;letter-spacing:-.02em;display:block;line-height:1.2}
+.stat span{display:block;color:var(--mut);font-size:13.5px}
+.stat small{display:block;color:#8d8d9b;font-size:12px;margin-top:4px}
+.three{display:grid;gap:14px}
+.three div{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--bd)}
+.three b{font-weight:600}.three span{color:var(--mut)}
+.foot{display:flex;align-items:center;justify-content:space-between;margin-top:28px}
+.dots{display:flex;gap:6px}.dots i{width:6px;height:6px;border-radius:50%;background:var(--bd)}.dots i.on{background:var(--p)}
+/* phone */
+.pstage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px;min-height:0}
+.tag{font-size:12.5px;color:var(--mut)}
+.phone{width:350px;height:min(690px,calc(100dvh - 56px - 52px));background:#fff;border:9px solid #16161d;border-radius:42px;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.sb{height:32px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:4px 22px 0;font-size:12px;font-weight:600}
+.sb::before{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:84px;height:22px;background:#16161d;border-radius:12px}
+.ah{flex:none;padding:6px 18px 10px;border-bottom:1px solid var(--bd);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.ah small{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.pb{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.bub{max-width:88%;padding:10px 13px;border-radius:16px;font-size:14.5px;background:var(--bg2);border-bottom-left-radius:4px}
+.bub.me{align-self:flex-end;background:var(--g);color:#fff;border-radius:16px;border-bottom-right-radius:4px}
+.chat{display:flex;gap:6px}.chat input{flex:1;border:1px solid var(--bd);border-radius:20px;padding:8px 13px;min-width:0}
+.chip{border:1px solid var(--bd);background:#fff;border-radius:12px;padding:9px 12px;text-align:left;font-size:13.5px;cursor:pointer}
+.chip.on{border-color:var(--p);background:#f6efff}
+.sug{font-size:12.5px;color:var(--p);background:none;border:0;cursor:pointer;text-align:left;padding:0}
+.mirror{border:1px solid #d9b8ff;background:#faf5ff;border-radius:14px;padding:14px;font-size:14.5px}
+.mirror q{display:block;color:var(--mut);font-size:13px;margin-bottom:8px;quotes:"« " " »"}
+.row2{display:flex;gap:8px;margin-top:12px}.row2 .btn{flex:1;padding:8px 6px;font-size:13px}
+.steps{display:flex;gap:4px}.steps i{flex:1;height:4px;border-radius:2px;background:var(--bd)}.steps i.on{background:var(--g)}
+.box{border:1px solid var(--bd);border-radius:12px;padding:12px 14px;font-size:14px}
+.box h4{font-size:13px;color:var(--mut);font-weight:600;margin-bottom:4px}
+.box ul{padding-left:18px}.box li{margin:2px 0}
+.pn{flex:none;display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--bd)}.pn .btn{flex:1;padding:8px}
+.tabs{flex:none;display:flex;border-top:1px solid var(--bd);padding:6px 4px 12px}
+.tabs button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;color:#9a9aa8;cursor:pointer}
+.tabs button.on{color:var(--p);font-weight:600}
+.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tg{width:42px;height:24px;border-radius:12px;background:#d4d4dc;border:0;position:relative;cursor:pointer;flex:none}
+.tg::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.15s}
+.tg.on{background:var(--g)}.tg.on::after{left:20px}
+input[type=range]{width:100%;accent-color:var(--p)}
+.fk{font-size:11.5px;background:#fff6e0;color:#8a5a00;border-radius:6px;padding:2px 7px;display:inline-block}
+/* counselor */
+.cstage{flex:1;display:flex;flex-direction:column;align-items:center;padding:14px 20px 10px;gap:8px;min-height:0}
+.win{flex:1;width:100%;max-width:1220px;border:1px solid var(--bd);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;min-height:0;box-shadow:0 8px 30px rgba(20,20,40,.07)}
+.wb{height:36px;flex:none;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px;padding:0 12px}
+.wb i{width:10px;height:10px;border-radius:50%;background:#d8d8e0}
+.wb span{margin:0 auto;background:#fff;border:1px solid var(--bd);border-radius:6px;font-size:12px;color:var(--mut);padding:2px 40px}
+.wbody{flex:1;display:grid;grid-template-columns:200px 330px 1fr;min-height:0}
+aside{border-right:1px solid var(--bd);padding:14px 10px;display:flex;flex-direction:column;gap:4px;background:#fcfcfd;font-size:14px}
+aside .logo{padding:2px 8px 12px}
+aside a{padding:6px 8px;border-radius:6px;color:var(--mut);display:block}
+aside a.on{background:#efe6fb;color:#4b1a99;font-weight:600}
+aside .me{margin-top:auto;font-size:12.5px;color:var(--mut);padding:8px}
+.q{border-right:1px solid var(--bd);display:flex;flex-direction:column;min-height:0}
+.qh{padding:12px 14px;border-bottom:1px solid var(--bd)}
+.qh h3{font-size:15px;margin-bottom:8px}
+.qh input{width:100%;border:1px solid var(--bd);border-radius:7px;padding:6px 10px;font-size:13px}
+.qr{padding:11px 14px;border-bottom:1px solid var(--bd);cursor:pointer;font-size:13px;display:block;width:100%;text-align:left;background:none;border-left:0;border-right:0;border-top:0}
+.qr:hover{background:var(--bg2)}.qr.sel{background:#f6efff;box-shadow:inset 3px 0 0 var(--p)}
+.qr b{font-size:13.5px;display:block}.qr span{color:var(--mut)}
+.qr.mut{cursor:default;color:var(--mut)}.qr.mut:hover{background:none}
+.bd{display:inline-block;font-size:11px;font-weight:600;border-radius:5px;padding:1px 6px;margin-left:6px}
+.bd.u{background:#fdecea;color:var(--warn)}.bd.w{background:#fff3d6;color:#8a5a00}
+.dt{padding:16px 22px;overflow:auto;display:flex;flex-direction:column;gap:12px;min-height:0}
+.dt h2{font-size:19px;letter-spacing:-.01em}
+.dt .sub{color:var(--mut);font-size:13.5px;margin-top:2px}
+.co{border:1px solid var(--bd);border-radius:10px;padding:12px 14px;font-size:13.5px}
+.co h4{font-size:13px;margin-bottom:6px;display:flex;justify-content:space-between}
+.co dl{display:grid;grid-template-columns:120px 1fr;gap:4px 12px}.co dt{color:var(--mut)}.co dd{margin:0}
+.co p.n{margin-top:8px;color:var(--p);font-weight:600}
+.lock{background:var(--bg2);color:var(--mut);text-align:center;padding:14px}
+.cmp textarea{width:100%;border:1px solid var(--bd);border-radius:8px;padding:8px 10px;resize:none;height:62px;font-size:13.5px}
+.cmp .r{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.okm{color:var(--ok);font-weight:600;font-size:13.5px}
+.cn{flex:none;display:flex;gap:8px}
+/* measures */
+.ms{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 24px;min-height:0}
+.ms .in{max-width:1000px}
+.ms h1{font-size:28px;margin-bottom:6px}.ms .lead{margin-bottom:16px;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:var(--mut);padding:8px 10px;border-bottom:1px solid var(--ink)}
+td{padding:9px 10px;border-bottom:1px solid var(--bd);vertical-align:top}
+td em{font-style:normal;color:var(--p);font-weight:600}
+.tl{display:grid;grid-template-columns:repeat(4,1fr);margin-top:16px;border:1px solid var(--bd);border-radius:10px}
+.tl div{padding:10px 14px;border-right:1px solid var(--bd);font-size:12.5px;color:var(--mut)}.tl div:last-child{border:0}.tl b{display:block;color:var(--ink);font-size:14px}
+@media(max-width:900px){
+.wbody{grid-template-columns:1fr;overflow:auto;display:block}aside{display:none}.q{border:0}
+}
+@media(max-width:820px){
+.stage{height:auto;min-height:calc(100dvh - 56px);overflow:visible}
+.phone{height:auto;min-height:560px;width:100%;max-width:400px}
+.stats{grid-template-columns:1fr}.stat,.stat.w{grid-column:auto}.av,.ap,.tl{grid-template-columns:1fr!important}.av div{grid-column:auto!important}.ms{overflow:auto;justify-content:flex-start}.two{grid-template-columns:1fr!important}
+.three div{grid-template-columns:1fr;gap:2px}
+.win{min-height:600px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+.q{overflow:hidden}.ql{overflow:auto;flex:1;min-height:0}
+.cn{width:100%;max-width:1220px;justify-content:flex-end;border-top:0;padding:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two .co dl{grid-template-columns:96px 1fr}
+.sh{font-size:13px;font-weight:600;margin:14px 0 8px}
+.av{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
+.av div{border:1px solid var(--bd);border-radius:10px;padding:10px 12px;grid-column:span 3}.av div.a3{grid-column:span 4}
+.av b{font-size:20px;display:block;letter-spacing:-.02em;line-height:1.25}.av span{font-size:12.5px;display:block}.av small{color:#8d8d9b;font-size:11.5px;display:block;margin-top:3px}
+.ap{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ap div{border:1px solid var(--bd);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--mut)}.ap b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:3px}
+.ap .ph{margin-top:8px;border:1px dashed #cbb3ef;border-radius:7px;padding:5px 8px;color:var(--p);font-weight:600;display:flex;justify-content:space-between;background:#fbf8ff}
+.ms .tl{margin-top:12px}.ms .nt{margin-top:10px;font-size:13px;color:var(--mut)}
+.ms{overflow:auto}
+
+.chat{align-items:flex-end}.chat textarea{flex:1;min-width:0;border:1px solid var(--bd);border-radius:16px;padding:8px 13px;resize:none;line-height:1.4;font-size:14.5px;overflow:auto;background:#fff}
+.bub{overflow-wrap:anywhere;white-space:normal}
+.stat.f{grid-column:1/-1}
+.ms{justify-content:flex-start;padding:10px 24px}.ms .in{margin:auto;max-width:1000px}
+.ms h1{font-size:24px;margin-bottom:2px}
+.hook{font-size:22px;line-height:1.3;font-weight:600;letter-spacing:-.015em;margin:2px 0 6px}.hook em{font-style:normal;color:var(--p)}
+.ms .sh{margin:10px 0 6px}
+.gn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gn div{border:1px solid var(--bd);border-left:3px solid var(--p);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--mut)}.gn b{display:block;color:var(--ink);font-size:14px;margin-bottom:2px}
+.ms .av div,.ms .ap div{padding:8px 10px}.ms .av b{font-size:17px}
+.ms .tl{margin-top:8px}.ms .nt{margin-top:6px;font-size:12.5px}
+.pl{margin-top:8px;border:1px solid #d9b8ff;background:#faf5ff;border-radius:10px;padding:9px 14px;font-size:13px}.pl b{margin-right:8px}
+@media(max-width:820px){.gn{grid-template-columns:1fr}}
+
+.ms .in{max-width:1180px}.ms .tl div{padding:6px 14px}.ms .tl b{font-size:13px}
+.ms .sh{margin:8px 0 4px}.gn div{padding:8px 12px}.ms .av div,.ms .ap div{padding:7px 10px}
+.ms .ap .ph{margin-top:5px;padding:3px 8px}.ms .nt{margin-top:4px}.pl{margin-top:6px;padding:7px 14px}
+@media(max-height:820px){.hook{font-size:18px}.ms h1{font-size:20px}.ms .av b{font-size:15px}.ms{padding:6px 24px}.ms .av span,.ms .ap div,.gn div{font-size:12px}}
+
+body{padding-top:56px}
+.top{position:fixed;top:0;left:0;right:0;z-index:50;height:56px;background:#fff;border-bottom:1px solid #E5E7EB;box-shadow:0 1px 2px rgba(16,24,40,.05);padding:0 32px;gap:24px}
+.top::after{background:#7C3AED;bottom:-1px;height:2px}
+.hl{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;color:#111;letter-spacing:-.01em;flex:1}
+.hl i{width:28px;height:28px;border-radius:8px;background:#7C3AED;color:#fff;display:grid;place-items:center;font-style:normal;font-size:15px;font-weight:700}
+.hn{display:flex;gap:32px;justify-content:center}
+.hn a{font-size:14px;font-weight:500;color:#374151;text-decoration:none;transition:color .15s}
+.hn a:hover{color:#7C3AED}
+.hr{display:flex;align-items:center;gap:16px;flex:1;justify-content:flex-end}
+.cta{background:#7C3AED;color:#fff;border-radius:8px;padding:8px 16px;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .15s}
+.cta:hover{background:#6D28D9}
+a.btn{text-decoration:none;display:inline-block;line-height:1.5}
+@media(max-width:820px){.hn{display:none}.top{padding:0 16px}.hl{flex:none}.cta{padding:7px 12px;font-size:13px}.hr{gap:10px}}
+</style></head>
+<body><div id="app"></div>
+<script>
+(()=>{
+let fr=true;const t=(a,b)=>fr?a:b;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const steps=['i0','i1','i2','r1','r2','r3','f1','f2','j1','p1','c','m'];
+const S={i:0,a1:'',a2:'',mir:'',fear:'',talk:false,conf:7,saved:false,share:false,sel:'lea',msg:{},sent:{}};
+let EX;
+const ic={r:'M4 5h16v11H9l-5 4z',f:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z',j:'M6 3h12v18H6zM9 8h6M9 12h6',p:'M12 12a4 4 0 100-8 4 4 0 000 8zM4 21c0-4 4-6 8-6s8 2 8 6'};
+let tabs;
+const $=document.getElementById('app');
+const go=d=>{S.i=Math.max(0,Math.min(steps.length-1,S.i+d));render()};
+const logo='<div class="logo"><i></i>Pathwise</div>';
+let FK;
+let pct;
+
+/* ---------- intro ---------- */
+function intro(n){
+ const st=(b,s,src,w)=>`<div class="stat${w==2?' f':w?' w':''}"><b>${b}</b><span>${s}</span>${src?`<small>${src}</small>`:''}</div>`;
+ const rp=t('Rapport Pathwise v0.3','Pathwise report v0.3'),pw=t('Recherche Pathwise','Pathwise research');
+ const body=[
+ `<h1>${t("Moins de temps par élève qu'il n'en faudrait.","Less time per student than there should be.")}</h1><p class="lead">${t("Nombre d'élèves par conseillère au Canada.","Students per counsellor in Canada.")}</p><div class="stats">
+ ${st('~375:1','Ontario',rp)}${st('~577:1',t('Colombie-Britannique','British Columbia'),rp)}${st('~1 150:1',t('Québec (estimation)','Quebec (estimate)'),rp)}
+ ${st('~300 · ~350',t('élèves suivis par conseillère : ~300 élèves pour l’une ; ~350 par an pour l’autre, soit ~25 par jour','students followed per counsellor: ~300 for one; ~350 a year for the other, about ~25 a day'),t('Entrevues Pathwise, octobre 2026','Pathwise interviews, October 2026'),2)}</div>`,
+ `<h1>${t("Beaucoup arrivent au choix sans plan clair.","Many reach the choice without a clear plan.")}</h1><p class="lead">${t("Ce que mesurent l'OCDE et nos recherches sur les élèves de 15 ans et le parcours après le secondaire.","What the OECD and our research show about 15-year-olds and the path after high school.")}</p><div class="stats">
+ ${st('39'+pct,t("des élèves de 15 ans dans les pays de l'OCDE n'ont pas de plan de carrière clair","of 15-year-olds in OECD countries have no clear career plan"),t('PISA 2022, OCDE — contre 25 % en 2018','PISA 2022, OECD — up from 25% in 2018'),1)}
+ ${st('21'+pct,t("ont un projet désaligné : le métier visé exige des études supérieures, mais ils ne prévoient pas d'y aller","have a misaligned plan: the job needs higher education, but they don't plan to go"),'PISA 2022, OCDE',1)}
+ ${st('40'+pct,t('terminent le baccalauréat en 4 ans','finish a bachelor’s degree in 4 years'),pw,1)}
+ ${st('~1/3',t('des cégépiens sans diplôme après 6 ans','of cégep students without a diploma after 6 years'),pw,1)}</div>`,
+ `<h1>${t("Un plan clair aide. Peu d'élèves vont voir le terrain.","A clear plan helps. Few students see the field.")}</h1><p class="lead">${t("Pathwise prépare la rencontre, vous la menez.","Pathwise prepares the meeting. You lead it.")}</p><div class="stats">
+ ${st('15 / 19',t("études longitudinales (70 000 jeunes, 8 pays) : un plan clair à l'adolescence mène à de meilleurs résultats d'emploi","longitudinal studies (70,000 young people, 8 countries): a clear plan in adolescence leads to better job outcomes"),'OCDE',1)}
+ ${st('35 · 45 · 35'+pct,t("des élèves ont fait un salon de l'emploi · une visite en milieu de travail · un stage","of students did a job fair · a workplace visit · an internship"),'PISA 2022, OCDE',1)}</div>
+ <div class="three" style="margin-top:14px"><div><b>${t('Réflexion guidée','Guided reflection')}</b><span>${t("Deux minutes entre vos séances; l'app renvoie à l'élève ses propres contradictions.","Two minutes between your sessions; the app reflects the student's own contradictions back.")}</span></div>
+ <div><b>${t('Démêler ma peur','Untangle my fear')}</b><span>${t("Cinq étapes pour nommer la peur de se tromper et la mettre à l'échelle.","Five steps to name the fear of choosing wrong and put it in perspective.")}</span></div>
+ <div><b>${t('Journal de décision','Decision journal')}</b><span>${t("Chaque choix est daté, justifié, puis revu. L'élève décide de ce que vous voyez.","Every choice is dated, justified, then reviewed. The student decides what you see.")}</span></div></div>`][n];
+ const next=`<button class="btn pri" data-n>${n==2?t('Voir la démo','See the demo'):t('Suivant','Next')}</button>`;
+ return `<div class="intro"><div class="in">${body}<div class="foot"><div class="dots">${[0,1,2].map(k=>`<i class="${k==n?'on':''}"></i>`).join('')}</div><div style="display:flex;gap:8px">${n?`<button class="btn" data-p>${t('Précédent','Back')}</button>`:''}${next}</div></div></div></div>`;
+}
+
+/* ---------- téléphone ---------- */
+function phone(id){
+ const ti=id[0]==='r'?0:id[0]==='f'?1:id[0]==='j'?2:3;
+ const bub=(x,me)=>`<div class="bub${me?' me':''}">${x}</div>`;
+ let h='',ok=true,sub='';
+ const chat=k=>(k==='a1'?bub(t("Salut ! Petite pause réflexion — 2 minutes, promis.","Hi! Quick reflection break — 2 minutes, promise."))+bub(t("Cette semaine, qu'est-ce que tu as aimé faire ? Même un petit truc.","This week, what did you enjoy doing? Even something small.")):bub(t("Et à l'inverse : un moment où tu t'es ennuyé cette semaine ?","And the other way around: a moment this week when you were bored?")))
+  +(S[k]?bub(esc(S[k]),1):`<div class="chat"><textarea readonly rows="1" aria-label="${t('Ta réponse','Your answer')}">${esc(EX[k])}</textarea><button class="btn pri sm" data-ex="${k}">${t('Envoyer','Send')}</button></div>`);
+ if(id==='r1'){h=chat('a1');ok=!!S.a1}
+ if(id==='r2'){h=chat('a2');ok=!!S.a2}
+ if(id==='r3'){
+  h=bub(t("Merci, j'ai noté.","Thanks, noted."))+`<div class="mirror"><q>${esc(S.a1)} · ${esc(S.a2)}</q>${t("Tu aimes démonter et comprendre comment ça marche, mais tu vises la chimie l'an prochain. Ça mérite qu'on en parle ?","You like taking things apart to see how they work, but you're aiming for chemistry next year. Worth talking about?")}
+  <div class="row2"><button class="btn ${S.mir==='y'?'pri':''}" data-m="y">${t('Oui, creusons','Yes, let’s dig in')}</button><button class="btn ${S.mir==='n'?'pri':''}" data-m="n">${t('Pas maintenant','Not now')}</button></div></div>
+  <div class="tag">${t("Ta conseillère verra cette réflexion avant votre rencontre.","Your counsellor will see this reflection before your meeting.")}</div>`
+  +(S.mir?bub(S.mir==='y'?t("Parfait, on le garde pour votre rencontre.","Great, we'll keep it for your meeting."):t("Pas de souci, on y reviendra quand tu voudras.","No problem, we'll come back whenever you like.")):'');
+  ok=!!S.mir;
+ }
+ if(id==='f1'||id==='f2'){
+  sub=t('Démêler ma peur · étape 2/5','Untangle my fear · step 2/5');
+  h=`<div class="steps">${[1,2,3,4,5].map(k=>`<i class="${k<=2?'on':''}"></i>`).join('')}</div>`;
+  if(id==='f1'){h+=bub(t("78 % des élèves ressentent ça en ce moment. C'est normal.","78% of students feel this right now. That's normal."))+`<div class="tag">${t('Quelle est ta crainte ?','What is your fear?')}</div><button class="chip ${S.fear==='wrong'?'on':''}" data-f="wrong">${t("J'ai peur de choisir le mauvais programme et de perdre un an.","I'm scared of picking the wrong program and losing a year.")}</button><button class="chip ${S.fear==='parents'?'on':''}" data-f="parents">${t("J'ai peur de décevoir mes parents.","I'm scared of letting my parents down.")}</button>`;ok=!!S.fear}
+  else h+=(S.fear==='parents'?bub(t("Cette crainte est fréquente. Ta conseillère peut en parler avec toi, à ton rythme.","This fear is common. Your counsellor can talk it through with you, at your pace.")):bub(t("Qu'est-ce qui arriverait vraiment ? Tu changerais de programme — comme 1 étudiant sur 3. L'année t'apprend ce que tu ne veux pas.","What would really happen? You'd switch programs, like 1 in 3 students. The year teaches you what you don't want."))+bub(t("Et ce serait irréversible ? Non. La plupart des cours de 1re année se transfèrent d'un programme à l'autre.","And would it be irreversible? No. Most first-year courses transfer from one program to another.")))
+   +`<div class="tag">${t("Ta conseillère voit déjà ta crainte. Si tu demandes à en parler, elle te contactera.","Your counsellor already sees your fear. If you ask to talk, she will contact you.")}</div><div class="row2"><button class="btn pri" data-n>${t('Continuer','Continue')}</button><button class="btn ${S.talk?'pri':''}" data-t>${S.talk?t('Demande envoyée ✓','Request sent ✓'):t("J'ai besoin d'en parler › conseillère","I need to talk › counsellor")}</button></div>`;
+ }
+ if(id==='j1'){
+  sub=t('Décision du 12 mars','Decision of March 12');
+  h=`<div class="box"><h4>${t('Choix de cours · 10e année','Course selection · Grade 10')}</h4><b>Physique + Chimie</b> ${t('plutôt que sciences humaines seules','rather than social sciences alone')}<br><span class="tag">${t('Confiance à l’époque : 7/10','Confidence then: 7/10')}</span></div>
+  <div class="box"><h4>${t('Mes raisons','My reasons')}</h4><ul><li>${t('Garder la porte de la médecine ouverte','Keep the door to medicine open')}</li><li>${t('J’aime comprendre comment les choses marchent','I like understanding how things work')}</li><li>${t('Mes notes le permettent et préalables vérifiés','My grades allow it and prerequisites are checked')}</li></ul></div>
+  <div class="box"><b>${t('Ça ouvre :','Opens:')}</b> ${t('Santé, génie, sciences pures','Health, engineering, pure sciences')}<br><b>${t('Ça ferme :','Closes:')}</b> ${t('rien pour l’instant','nothing for now')}</div>
+  <div class="tag">${t("Revue prévue dans 3 mois — on vérifiera ensemble si ce choix tient toujours.","Review planned in 3 months — we'll check together whether this choice still holds.")}</div>
+  <div class="box"><span>${t('Ma confiance aujourd’hui','My confidence today')}: <b id="cv">${S.conf}</b>/10</span><input type="range" min="1" max="10" value="${S.conf}" id="cf"><div class="row2"><button class="btn ${S.saved?'':'pri'}" data-s>${S.saved?t('Enregistré dans le journal ✓','Saved to journal ✓'):t('Enregistrer','Save')}</button></div></div>`;
+ }
+ if(id==='p1'){
+  const r=(l,on)=>`<div class="sw"><span>${l}</span><span class="${on?'okm':'tag'}">${on?t('Partagé ✓','Shared ✓'):t('Privé','Private')}</span></div>`;
+  h=`<div class="box"><b>${t('Élève','Student')} #2041</b><br><span class="tag">Sec 4 · Collège Saint-Louis</span><br><span class="fk">${FK}</span></div>
+  <div class="box"><div class="sw"><div><b>${t('Partager mon journal','Share my journal')}</b><br><span class="tag">${S.share?t('Mme Tremblay peut le voir','Ms. Tremblay can see it'):t('Privé : personne ne le voit','Private: nobody can see it')}</span></div><button class="tg ${S.share?'on':''}" data-sh role="switch" aria-checked="${S.share}" aria-label="${t('Partager mon journal','Share my journal')}"></button></div></div>
+  <div class="box"><h4>${t('Ce que ta conseillère voit','What your counsellor sees')}</h4>${r(t('Ma réflexion','My reflection'),true)}${r(t('Ma peur','My fear'),true)}${r(t('Mon journal','My journal'),S.share)}</div>
+  <div class="tag">${t("Ton dossier scolaire (cours, notes) est déjà accessible à l'école. Tu peux changer le reste à tout moment.","Your school record (courses, grades) is already available to the school. You can change the rest at any time.")}</div>`;
+ }
+ const last=id==='p1';
+ return `<div class="pstage"><div class="tag">${t('Version élève · Sec 4','Student version · Grade 10')} — ${FK}</div>
+ <div class="phone"><div class="sb"><span>9:41</span><span>5G ▮▮▮</span></div><div class="ah">${tabs[ti][1]}${sub?`<small>${sub}</small>`:''}</div><div class="pb">${h}</div>
+ <div class="pn"><button class="btn" data-p>${t('Précédent','Back')}</button><button class="btn pri" data-n ${ok?'':'disabled'}>${last?t('Voir la vue conseillère','See counsellor view'):t('Suivant','Next')}</button></div>
+ <nav class="tabs">${tabs.map((x,k)=>`<button class="${k==ti?'on':''}" data-tab="${x[2]}"><svg viewBox="0 0 24 24"><path d="${ic[x[0]]}"/></svg>${x[1]}</button>`).join('')}</nav></div></div>`;
+}
+
+/* ---------- conseillère ---------- */
+let AU;
+let ST;
+function setLang(l){fr=l==='fr';document.documentElement.lang=l;document.title=t('Pathwise — démo pour conseillères et conseillers d’orientation','Pathwise — demo for guidance counsellors');
+EX={a1:t("J'ai aidé mon cousin à monter son PC, c'était cool","I helped my cousin build his PC, it was fun"),a2:t("Le cours de chimie... 75 minutes interminables","Chemistry class... 75 endless minutes")};
+tabs=[['r',t('Réflexion','Reflect'),'r1'],['f',t('Peur','Fear'),'f1'],['j',t('Journal','Journal'),'j1'],['p',t('Profil','Profile'),'p1']];
+FK=t('données fictives — démonstration','fictional data — demonstration');
+pct=t(' %','%');
+AU=[
+ ['#1204',3,t("Journal mis à jour hier","Journal updated yesterday"),t("Techniques de l'informatique (cégep)","Computer technology (cégep)"),t("Revue du journal dans 2 semaines","Journal review in 2 weeks")],
+ ['#1311',4,t("Réflexion guidée terminée","Guided reflection completed"),t("Sciences de la nature (cégep)","Natural sciences (cégep)"),t("Visite du cégep en novembre","Cégep visit in November")],
+ ['#1456',5,t("Stage d'observation effectué","Job shadowing done"),t("DEP en électricité","Electrical vocational diploma"),t("Demande d'admission en janvier","Admission application in January")],
+ ['#1590',4,t("A partagé son journal","Shared their journal"),t("Arts, lettres et communication","Arts, literature and communication"),t("Rencontre facultative","Optional meeting")],
+ ['#1688',3,t("3 entrées au journal ce mois-ci","3 journal entries this month"),t("Encore ouvert — 3 pistes notées","Still open — 3 options noted"),t("Revue dans 6 semaines","Review in 6 weeks")],
+ ['#1742',5,t("Module « Démêler ma peur » terminé","‘Untangle my fear’ completed"),t("Techniques de soins infirmiers","Nursing technology"),t("Confirmer les préalables","Confirm prerequisites")],
+ ['#1905',4,t("Salon des métiers visité","Visited the careers fair"),t("Sciences humaines","Social sciences"),t("Refaire la réflexion en février","Redo reflection in February")],
+ ['#2113',5,t("Confiance à 8/10 au dernier relevé","Confidence at 8/10 at last check"),t("Techniques de génie mécanique","Mechanical engineering technology"),t("Aucune action requise","No action required")]];
+ST=[{id:'lea',c:'#2041',g:4,lv:'u'},{id:'adam',c:'#1873',g:3,lv:'w'},...AU.map((a,k)=>({id:'a'+k,c:a[0],g:a[1],lv:'a',a}))];
+}
+
+const dl=a=>a.length?a.join('<br>'):t('Pas encore de données.','No data yet.');
+const card=(h,tg,rows)=>`<div class="co"><h4>${h}<span class="tag">${tg||''}</span></h4><dl>${rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('')}</dl></div>`;
+const gr=(a)=>a.map(x=>`${x[0]} ${x[1]}${pct}`).join(' · ');
+function leaBrief(){
+ const prof=[],fears=[],dig=[];
+ if(S.a1||S.a2){prof.push(t('Aime','Enjoys')+` : « ${esc(S.a1)} »`,t("S'ennuie","Bored by")+` : « ${esc(S.a2)} »`,t("Tension : aime démonter et comprendre, vise la chimie.","Tension: likes taking things apart, aims for chemistry."))}
+ if(S.mir==='y')dig.push(t("A accepté d'explorer l'écart entre ses goûts et son choix de chimie.","Agreed to explore the gap between her interests and her chemistry choice."));
+ if(S.fear){fears.push(esc(S.fear==='parents'?t("J'ai peur de décevoir mes parents.","I'm scared of letting my parents down."):t("J'ai peur de choisir le mauvais programme et de perdre un an.","I'm scared of picking the wrong program and losing a year.")));if(S.talk)fears.push(t("A demandé à vous parler.","Asked to talk to you."));if(S.fear==='wrong')dig.push(t("Peur de perdre un an : revoir les passerelles entre programmes.","Fear of losing a year: review pathways between programs."))}
+ if(S.share&&S.saved)dig.push(t(`Confiance à ${S.conf}/10 (7/10 en mars).`,`Confidence at ${S.conf}/10 (7/10 in March).`));
+ return `<div class="co"><h4>${t('Copilote de séance','Session copilot')}<span class="tag">${t('Briefing généré','Generated briefing')}</span></h4><dl><dt>${t('Profil','Profile')}</dt><dd>${dl(prof)}</dd><dt>${t('Peurs détectées','Detected fears')}</dt><dd>${dl(fears)}</dd><dt>${t('Points à creuser','To explore')}</dt><dd>${dl(dig)}</dd></dl><p class="n">${t("La séance 1:1 part de 80 %, pas de zéro.","The 1:1 session starts at 80%, not zero.")}</p></div>`;
+}
+function detail(s){
+ const cmp=()=>{const m=S.msg[s.id]!==undefined?S.msg[s.id]:(s.id==='lea'?t("Bonjour, j'ai vu que tu as commencé à réfléchir à ton choix. Passe me voir cette semaine : on part de ce que tu as déjà écrit.","Hi, I saw you've started thinking about your choice. Drop by this week: we'll start from what you've already written."):t("Bonjour, passe me voir cette semaine : on fait le point ensemble sur ton parcours.","Hi, drop by this week: let's review your path together."));const sent=S.sent[s.id];
+  return `<div class="co cmp"><h4>${t('Message personnel à l’élève','Personal message to the student')} ${s.c}</h4><textarea id="ms" ${sent?'disabled':''}>${esc(m)}</textarea><div class="r">${sent?`<span class="okm">${t('Message envoyé ✓','Message sent ✓')}</span>`:'<span></span>'}<button class="btn pri sm" data-send ${sent?'disabled':''}>${t('Envoyer','Send')}</button></div></div>`};
+ const head=(b,sb)=>`<div><h2>${t('Élève','Student')} ${s.c} ${b}</h2><div class="sub">Sec ${s.g} · ${sb} · <span class="fk">${t('données fictives','fictional data')}</span></div></div>`;
+ if(s.id==='lea')return head('<span class="bd u">URGENT</span>',t("Blocage persistant : peur de se tromper (3 sem.)","Persistent block: fear of getting it wrong (3 wks)"))+leaBrief()+`<div class="two">`+card(t('Dossier scolaire','School record'),t("École","School"),[[t('Moyennes','Grades'),gr([[t('Physique','Physics'),78],[t('Chimie','Chemistry'),71],['Math',81],[t('Français','French'),76]])],[t('Étape préc.','Prev. term'),t('Chimie 74 %','Chemistry 74%')],[t('Préalables','Prerequisites'),t('Vérifiés : santé, génie','Verified: health, engineering')],[t('Dossier perso.','Personal file'),t("Aucun plan d'intervention · 4 absences","No intervention plan · 4 absences")]])
+  +card(t('Journal de décision','Decision journal'),S.share?t('Partagé','Shared'):t('Privé','Private'),S.share?[['12 '+t('mars','March'),t('Physique + Chimie plutôt que sciences humaines seules','Physics + Chemistry rather than social sciences alone')],[t('Raisons','Reasons'),t('Médecine ouverte · aime comprendre · notes et préalables OK','Medicine kept open · likes understanding · grades and prerequisites OK')],[t('Confiance','Confidence'),'7/10 '+t('en mars','in March')+(S.saved?` → ${S.conf}/10 ${t('aujourd’hui','today')}`:'')]]:[[ '',`<div class="lock">${t("Journal privé — l'élève ne l'a pas partagé avec vous.","Private journal — the student has not shared it with you.")}</div>`]])+`</div>`+cmp();
+ if(s.id==='adam')return head('<span class="bd w">'+t('À voir cette semaine','See this week')+'</span>',t("Contradiction : vise la santé mais évite les sciences.","Contradiction: aims for health but avoids sciences."))
+  +card(t('Copilote de séance','Session copilot'),t('Briefing généré','Generated briefing'),[[t('Profil','Profile'),t("Vise : soins infirmiers ou pharmacie · aime aider les autres","Aims for: nursing or pharmacy · likes helping others")],[t('Peurs détectées','Detected fears'),t("Peur d'échouer en sciences · évite les cours exigeants","Fear of failing in sciences · avoids demanding courses")],[t('Points à creuser','To explore'),t("Écart entre la voie santé et l'évitement des sciences · préalables à reprendre","Gap between the health path and avoiding sciences · prerequisites to retake")]])
+  +`<div class="two">`+card(t('Dossier scolaire','School record'),t("École","School"),[[t('Moyennes','Grades'),gr([[t('Sciences','Science'),62],['Math',70],[t('Français','French'),83],[t('Éthique','Ethics'),88]])],[t('Préalables','Prerequisites'),t('Sciences à reprendre pour la voie santé','Sciences to retake for the health path')],[t('Dossier perso.','Personal file'),t("Aucun plan d'intervention · 9 absences","No intervention plan · 9 absences")]])
+  +card(t('Journal de décision','Decision journal'),t('Partagé','Shared'),[['5 '+t('avril','April'),t("Abandonner l'option sciences","Drop the science option")],[t('Raisons','Reasons'),t("Trop difficile · peur d'échouer","Too hard · fear of failing")],[t('Confiance','Confidence'),'4/10']])+`</div>`+cmp();
+ const a=s.a;return head('<span class="bd" style="background:#e8f6ee;color:var(--ok)">'+t('Autonome','Independent')+'</span>',t("Parcours autonome — tout va bien.","Independent path — all good."))+card(t('Activité','Activity'),'',[[t('Projet','Plan'),a[3]],[t('Activité récente','Recent activity'),a[2]],[t('Prochaine étape','Next step'),a[4]]])+cmp();
+}
+function counselor(){
+ const s=ST.find(x=>x.id===S.sel);
+ const row=x=>{let b='',sb;if(x.id==='lea'){b='<span class="bd u">URGENT</span>';sb=t("Sec 4 · Blocage persistant : peur de se tromper (3 sem.)","Gr. 10 · Persistent block: fear of getting it wrong (3 wks)")}else if(x.id==='adam'){b='<span class="bd w">'+t('À voir cette semaine','See this week')+'</span>';sb=t("Sec 3 · Contradiction : vise la santé mais évite les sciences.","Gr. 9 · Contradiction: aims for health but avoids sciences.")}else sb=`Sec ${x.g} · ${x.a[2]}`;
+  return `<button class="qr ${S.sel===x.id?'sel':''}" data-sel="${x.id}" data-q="${x.c} ${esc(sb)}"><b>${t('Élève','Student')} ${x.c}${b}</b><span>${sb}</span></button>`};
+ return `<div class="cstage"><div class="tag">${t('Version conseillère · Collège Saint-Louis','Counsellor version · Collège Saint-Louis')} — ${FK}</div>
+ <div class="win"><div class="wb"><i></i><i></i><i></i><span>pathwise · ${t('Mme Tremblay','Ms. Tremblay')}</span></div><div class="wbody"><aside>${logo}<a class="on">${t('Élèves','Students')}</a><a>${t('Séances','Sessions')}</a><a>${t('Messages','Messages')}</a><a>${t('Rapports','Reports')}</a><div class="me">${t('Mme Tremblay','Ms. Tremblay')}<br>${t('12 élèves suivis','12 students followed')}</div></aside>
+ <section class="q"><div class="qh"><h3>${t("File d'urgence",'Priority queue')}</h3><input id="se" placeholder="${t('Rechercher un élève…','Search a student…')}" aria-label="${t('Rechercher','Search')}"></div><div class="ql">${ST.map(row).join('')}</div></section>
+ <section class="dt">${detail(s)}</section></div></div>
+ <div class="pn cn"><button class="btn" data-p>${t('Précédent','Back')}</button><button class="btn pri" data-n>${t('Voir ce qu’il y a à gagner','See what is to gain')}</button></div></div>`;
+}
+
+/* ---------- mesures ---------- */
+function measures(){
+ const a=(c,b,l,src,w)=>`<div class="${w?'a3':''}"><b>${b}</b><span>${l}</span><small>${src}</small></div>`;
+ const o='PISA 2022, OCDE',ap=(n,m)=>`<div><b>${n}</b>${m}</div>`;
+ return `<div class="ms"><div class="in"><h1>${t('Ce qu’il y a à gagner','What there is to gain')}</h1>
+ <p class="hook">${t('Moins de temps perdu sur la paperasse, plus d’élèves aidés — <em>et la preuve que ça marche.</em>','Less time lost on paperwork, more students helped — <em>and proof that it works.</em>')}</p>
+ <div class="sh">${t('Ce que vous gagnez','What you gain')}</div>
+ <div class="gn"><div><b>${t('Du temps pour le lien','Time for the human connection')}</b>${t('Le briefing prépare vos rencontres : vous commencez à 80 %, pas de zéro. Le temps gagné va aux élèves qui en ont vraiment besoin.','The briefing prepares your meetings: you start at 80%, not zero. The time you save goes to the students who truly need it.')}</div>
+ <div><b>${t('Plus aucun élève invisible','No student left invisible')}</b>${t('Le triage repère aussi ceux qui ne demandent jamais rien — aujourd’hui, ils passent à travers.','Triage also spots the ones who never ask for anything — today, they slip through.')}</div>
+ <div><b>${t('La preuve de votre impact','Proof of your impact')}</b>${t('Enfin une mesure de la qualité des décisions, pas juste du nombre de rencontres.','At last, a measure of decision quality, not just the number of meetings.')}</div></div>
+ <div class="sh">${t('Après — ce qu’on mesurera pendant le pilote','After — what we will measure during the pilot')}</div>
+ <div class="ap">${ap(t('Qualité de la décision','Decision quality'),t("Score du journal (raisons notées + confiance déclarée), à T0 puis +3, +6 et +12 mois","Journal score (reasons noted + stated confidence), at T0 then +3, +6 and +12 months"))}
+ ${ap(t('Clarté du projet','Plan clarity'),t("% d'élèves avec un plan clair, avant puis après, dans la même école pilote","% of students with a clear plan, before then after, in the same pilot school"))}
+ ${ap(t('Temps de la conseillère','Counsellor time'),t("Minutes gagnées par rencontre grâce au briefing, mesurées par la conseillère elle-même","Minutes saved per meeting thanks to the briefing, measured by the counsellor herself"))}
+ ${ap(t('Suivi','Follow-up'),t("% d'élèves toujours satisfaits de leur choix à +3, +6 et +12 mois","% of students still satisfied with their choice at +3, +6 and +12 months"))}</div>
+ <div class="tl"><div><b>T0</b>${t('Mesures de référence','Baseline')}</div><div><b>+3 ${t('mois','months')}</b>${t('Premier relevé','First reading')}</div><div><b>+6 ${t('mois','months')}</b>${t('Relevé intermédiaire','Interim reading')}</div><div><b>+12 ${t('mois','months')}</b>${t('Bilan du pilote','Pilot review')}</div></div>
+ <p class="nt">${t("Méthode de comparaison : même cohorte, avant/après, dans l'école pilote. On ne peut pas montrer de résultats après aujourd'hui — le pilote sert justement à les produire.","Comparison method: same cohort, before/after, in the pilot school. We cannot show after-results today — the pilot exists precisely to produce them.")}</p>
+ <div class="pl"><b>${t('Un pilote sans risque','A risk-free pilot')}</b>${t('Gratuit, une école, un trimestre. Vous gardez le contrôle, on mesure ensemble, et vous pouvez arrêter quand vous voulez.','Free, one school, one term. You stay in control, we measure together, and you can stop whenever you want.')}</div>
+ <div class="foot" style="margin-top:10px"><span></span><div style="display:flex;gap:8px"><button class="btn" data-p>${t('Précédent','Back')}</button><button class="btn" data-r>${t('Recommencer la démo','Restart the demo')}</button><a class="btn pri" href="mailto:jadalhaq.elb@hotmail.com?subject=${t('%C3%89cole%20pilote%20Pathwise','Pilot%20school%20Pathwise')}">${t('Devenir école pilote','Become a pilot school')}</a></div></div></div></div>`;
+}
+
+function render(){
+ const id=steps[S.i];
+ $.innerHTML=`<header class="top" style="--pr:${(S.i+1)/steps.length*100}%"><div class="hl"><i>P</i>Pathwise</div><nav class="hn" aria-label="Pathwise"><a href="#" data-go="r1">${t('La démo','The demo')}</a><a href="#" data-go="c">${t('Pour les conseillères','For counsellors')}</a><a href="#" data-go="m">${t('Mesures','Measures')}</a></nav><div class="hr"><div class="lang"><a href="#" data-lang="fr" class="${fr?'on':''}">FR</a><a href="#" data-lang="en" class="${fr?'':'on'}">EN</a></div><a class="cta" href="mailto:jadalhaq.elb@hotmail.com?subject=${t('%C3%89cole%20pilote%20Pathwise','Pilot%20school%20Pathwise')}">${t('Devenir école pilote','Become a pilot school')}</a></div></header><div class="stage">${id[0]==='i'?intro(+id[1]):id==='c'?counselor():id==='m'?measures():phone(id)}</div>`;
+ $.querySelectorAll('.chat textarea').forEach(x=>{x.style.height='auto';x.style.height=(x.scrollHeight+2)+'px'});
+ if(id==='c'){
+  const c=$.querySelector('#ms');if(c)c.oninput=()=>S.msg[S.sel]=c.value;
+  const q=$.querySelector('#se');q.oninput=()=>$.querySelectorAll('.qr').forEach(e=>e.style.display=e.dataset.q.toLowerCase().includes(q.value.toLowerCase())?'':'none');
+ }
+ if(id==='j1'){const f=$.querySelector('#cf');f.oninput=()=>{S.conf=+f.value;S.saved=false;$.querySelector('#cv').textContent=f.value;const b=$.querySelector('[data-s]');b.textContent=t('Enregistrer','Save');b.classList.add('pri')}}
+}
+$.addEventListener('click',e=>{
+ const gn=e.target.closest('[data-go]');if(gn){e.preventDefault();S.i=steps.indexOf(gn.dataset.go);return render()}
+ const lg=e.target.closest('[data-lang]');if(lg){e.preventDefault();setLang(lg.dataset.lang);return render()}
+ const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if('n'in d)return go(1);
+ if('p'in d)return go(-1);
+ if('pilot'in d){S.pilot=true;return render()}
+ if('r'in d){Object.assign(S,{pilot:false,i:0,a1:'',a2:'',mir:'',fear:'',talk:false,conf:7,saved:false,share:false,sel:'lea',msg:{},sent:{}});return render()}
+ if(d.tab){S.i=steps.indexOf(d.tab);return render()}
+ if(d.ex){S[d.ex]=EX[d.ex];return render()}
+ if(d.m){S.mir=d.m;return render()}
+ if(d.f){S.fear=d.f;return render()}
+ if('t'in d){S.talk=!S.talk;return render()}
+ if('s'in d){S.saved=true;return render()}
+ if('sh'in d){S.share=!S.share;return render()}
+ if(d.sel){S.sel=d.sel;return render()}
+ if('send'in d){S.msg[S.sel]=document.getElementById('ms').value;S.sent[S.sel]=true;return render()}
+});
+setLang('fr');render();
+})();
+</script></body></html>
